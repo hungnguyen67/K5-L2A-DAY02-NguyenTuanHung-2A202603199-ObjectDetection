@@ -16,7 +16,7 @@
 Dẫn tới [GUIDELINE_MINI.md](../../GUIDELINE_MINI.md). Tóm tắt ba ca mơ hồ đã quyết định, cách áp dụng schema và phần cần giảng viên làm rõ.
 
 - Schema: `car=0`, `truck=1`, `bus=2`, `van=3`. Quy tắc box: mỗi xe một box quanh phần nhìn thấy; xe bị che/cắt khung vẫn gán nếu đủ căn cứ nhận diện.
-- `GUIDELINE_MINI.md` hiện ghi ba tình huống `drive_052`, `drive_053`, `drive_059`; đây là ảnh eval nên không chứng minh các quyết định đã áp dụng khi gán nhãn train. Nếu yêu cầu ba ca từ quá trình gán nhãn train, cần thay bằng các ca train thực tế đã tự xử lý.
+- `GUIDELINE_MINI.md` ghi ba tình huống từ ảnh train `drive_002`, `drive_041`, `drive_024`, lần lượt minh họa xe bị che khuất, xe buýt bị cắt khung và xe nhỏ/chen sát khó xác định lớp; không dùng ảnh eval làm ca train.
 - Cần hỏi giảng viên: cách xử lý các trường hợp không đủ thông tin để phân biệt chắc `car`/`van`/`bus` theo schema.
 
 ## 3. Annotation và self-QC
