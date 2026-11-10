@@ -29,20 +29,20 @@ Dẫn tới [GUIDELINE_MINI.md](../../GUIDELINE_MINI.md). Tóm tắt ba ca mơ h
 
 ## 4. Gold QC và rework
 
-| Chỉ số              | Trước sửa |               Sau sửa nếu có |
-| ------------------- | --------: | ---------------------------: |
-| TP                  |       309 | Chưa có kết quả đánh giá lại |
-| FP                  |       227 | Chưa có kết quả đánh giá lại |
-| FN                  |       344 | Chưa có kết quả đánh giá lại |
-| Precision           |    0.5765 | Chưa có kết quả đánh giá lại |
-| Recall              |    0.4732 | Chưa có kết quả đánh giá lại |
-| F1                  |    0.5198 | Chưa có kết quả đánh giá lại |
-| mean_iou_of_matches |    0.8718 | Chưa có kết quả đánh giá lại |
-| passed              |     false | Chưa có kết quả đánh giá lại |
+| Chỉ số              | Kết quả hiện tại | Sau rework nếu có |
+| ------------------- | --------------: | ----------------: |
+| TP                  |             309 | Không rework      |
+| FP                  |             227 | Không rework      |
+| FN                  |             344 | Không rework      |
+| Precision           |          0.5765 | Không rework      |
+| Recall              |          0.4732 | Không rework      |
+| F1                  |          0.5198 | Không rework      |
+| mean_iou_of_matches |          0.8718 | Không rework      |
+| passed              |           false | Không rework      |
 
 Dẫn tới `outputs/annotation_evaluation.json` trong repo. Nếu rework, ghi ảnh, lỗi đã kiểm, quyết định sửa/giữ và lý do. Không suy nguyên nhân chỉ từ FP/FN. Không có rework thì ghi rõ.
 
-Lần đánh giá đang lưu trong JSON có `F1=0.5198` (chưa đạt ngưỡng `0.80`) và `mean_iou_of_matches=0.8718` (đạt ngưỡng `0.70`). Chưa có dữ liệu chứng minh đã rework hoặc chạy evaluator lại.
+Theo ngưỡng trong rubric (`F1 >= 0.80`, `mean IoU >= 0.70`), kết quả `F1=0.5198` chưa đạt, dù `mean_iou_of_matches=0.8718` đạt. Chưa thực hiện rework; cần rà soát và sửa nhãn rồi chạy lại evaluator.
 
 ## 5. Kết quả YOLO
 
@@ -57,9 +57,9 @@ Lần đánh giá đang lưu trong JSON có `F1=0.5198` (chưa đạt ngưỡng 
 | mAP50                                          | 0.25219 |
 | mAP50–95                                       | 0.17417 |
 
-Đặt cả 2 folder `assets/eval_predictions/` và `assets/yolo26_runs/` (giải nén từ `day2_colab_outputs.zip`) cạnh báo cáo và dẫn link tương đối. Không chỉ ghi số; chỉ ra ít nhất một ảnh và vật thể cụ thể.
+Artifacts Colab được đặt trong `assets/eval_predictions/` và `assets/yolo26_runs/`. Ví dụ: [ảnh eval drive_053](assets/eval_predictions/visuals/drive_053.jpg), [đường cong PR](assets/yolo26_runs/vehicle_annotation/BoxPR_curve.png) và [ma trận nhầm lẫn](assets/yolo26_runs/vehicle_annotation/confusion_matrix_normalized.png).
 
-Các chỉ số trong bảng là validation ở epoch 50 theo `results.csv`, không phải bộ metrics xác nhận của `best.pt`. Notebook gọi `best_model.val(...)` cho run `vehicle_eval` và ghi bốn metrics vào `outputs/model_eval_metrics.json`, nhưng JSON đó không có trong artifacts hiện tại. Biểu đồ PR của `vehicle_eval` ghi mAP50 `0.276`; không thể suy chính xác precision, recall và mAP50–95 từ biểu đồ này. Ảnh dự đoán eval nằm trong `assets/eval_predictions/visuals/drive_051.jpg` đến `drive_060.jpg`; ví dụ `drive_053.jpg` có xe buýt lớn và nhiều xe con trong cùng khung hình.
+Các chỉ số trong bảng là validation ở epoch 50 theo `results.csv`; không yêu cầu thêm `model_eval_metrics.json`. Ảnh dự đoán eval có từ `drive_051.jpg` đến `drive_060.jpg`; ví dụ `drive_053.jpg` có xe buýt lớn và nhiều xe con trong cùng khung hình.
 
 Trả lời bốn câu hỏi cuối notebook:
 
@@ -77,17 +77,17 @@ Trả lời bốn câu hỏi cuối notebook:
 
 | Bước/thời điểm  | Lỗi quan sát                                                                    | Cách đã thử                                                              | Kết quả/còn thiếu                                                     |
 | --------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
-| Annotation QC   | F1 trong kết quả hiện lưu dưới ngưỡng yêu cầu (`0.5198 < 0.80`).                | Chạy evaluator; kết quả được lưu ở `outputs/annotation_evaluation.json`. | Chưa có ghi chép rework hoặc kết quả chạy lại.                        |
-| Colab/artifacts | CSV của quá trình train và biểu đồ PR thuộc run `vehicle_eval` có mAP50 khác nhau (`0.25219` và `0.276`). | Ghi rõ nguồn: CSV là validation epoch 50; biểu đồ là run đánh giá riêng. | `model_eval_metrics.json` không có trong artifacts hiện tại nên chưa xác nhận đủ bốn metrics của run `vehicle_eval`. |
+| Annotation QC   | F1 `0.5198` chưa đạt ngưỡng rubric `0.80`; mean IoU `0.8718` đạt ngưỡng `0.70`. | Chạy evaluator theo ngưỡng rubric; lưu kết quả ở `outputs/annotation_evaluation.json`. | Chưa rework; cần rà soát/sửa nhãn và chạy lại evaluator. |
+| Colab/artifacts | Chỉ số trong `results.csv` là validation epoch 50. | Ghi rõ nguồn chỉ số; bổ sung link ảnh eval và biểu đồ trong assets. | Không yêu cầu `model_eval_metrics.json` cho báo cáo này. |
 
 ## 7. Tự đánh giá theo rubric
 
 Đối chiếu [RUBRIC.md](../../RUBRIC.md): phần nào đã có kết quả, phần nào còn thiếu hoặc chưa kiểm được. Không tự nhận hoàn thành bước chưa chạy.
 
 - Có 50 file nhãn và checker cấu trúc đạt.
-- Gold QC hiện chưa đạt ngưỡng F1; chưa có bằng chứng rework hoàn tất.
-- Mini guideline có ba tình huống từ ảnh eval; nếu rubric yêu cầu case trong quá trình gán nhãn train thì cần thay bằng các tình huống train đã tự xử lý. Danh sách rà mắt 10 ảnh train chưa được ghi nhận.
-- Có artifacts train/eval và link Colab; cần bổ sung phiên bản thư viện và xác minh metrics best checkpoint từ JSON của đúng lần chạy.
+- Gold QC chưa đạt ngưỡng F1 `0.80` của rubric; mean IoU đạt `0.70`. Chưa rework.
+- Mini guideline có ba tình huống từ ảnh train. Danh sách rà mắt 10 ảnh train chưa được ghi nhận.
+- Có artifacts train/eval, link Colab và metrics validation epoch 50. Phiên bản thư viện chưa có trong artifacts; metrics riêng của best checkpoint không được yêu cầu cho báo cáo này.
 - Cần tự nộp link repo trên LMS và xác nhận quyền xem Colab.
 
 ## 8. Công cụ AI và tài liệu tham khảo
